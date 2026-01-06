@@ -7,7 +7,7 @@ TRACK = 1
 ADDRESS = 'https://music.youtube.com/youtubei/v1{}?prettyPrint=false'
 
 
-class InnertubeError(Exception):
+class Error(Exception):
 	pass
 
 
@@ -53,12 +53,12 @@ async def _audio(
 	}
 	response = await session.post(ADDRESS.format('/player'), data=body, headers=headers)
 	if response.status != 200:
-		raise InnertubeError(f'{response.status} HTTP status')
+		raise Error(f'{response.status} HTTP status')
 	response = await response.text()
 	data = json.loads(response)
 	status = data['playabilityStatus']['status']
 	if status != 'OK':
-		raise InnertubeError(status)
+		raise Error(f'Error code: {status}')
 	sources = []
 	for source in data['streamingData']['adaptiveFormats']:
 		if source['mimeType'].startswith(mime):
@@ -109,7 +109,7 @@ async def _search(
 	}
 	response = await session.post(ADDRESS.format('/search'), data=body, headers=headers)
 	if response.status != 200:
-		raise InnertubeError(f'{response.status} HTTP status')
+		raise Error(f'{response.status} HTTP status')
 	response = await response.text()
 	response = json.loads(response)
 	if data != TRACK:
@@ -188,7 +188,7 @@ async def _suggestions(
 		ADDRESS.format('/music/get_search_suggestions'), data=data, headers=headers
 	)
 	if response.status != 200:
-		raise InnertubeError(f'{response.status} HTTP status')
+		raise Error(f'{response.status} HTTP status')
 	response = await response.text()
 	response = json.loads(response)
 	suggestions = []

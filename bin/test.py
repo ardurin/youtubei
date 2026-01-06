@@ -40,8 +40,11 @@ def audio(arguments):
 	if options is None:
 		return False
 	size, value = options
-	response = asyncio.run(youtubei.audio(value, size=size))
-	print(json.dumps(response, default=vars))
+	try:
+		response = asyncio.run(youtubei.audio(value, size=size))
+		print(json.dumps(response, default=vars))
+	except youtubei.Error as error:
+		print(error, file=sys.stderr)
 	return True
 
 
@@ -50,8 +53,11 @@ def search(arguments):
 	if options is None:
 		return False
 	size, value = options
-	response = asyncio.run(youtubei.search(value, size=size))
-	print(json.dumps(response, default=vars))
+	try:
+		response = asyncio.run(youtubei.search(value, size=size))
+		print(json.dumps(response, default=vars))
+	except youtubei.Error as error:
+		print(error, file=sys.stderr)
 	return True
 
 
@@ -60,8 +66,11 @@ def suggestions(arguments):
 	if options is None:
 		return False
 	size, value = options
-	response = asyncio.run(youtubei.suggestions(value, size=size))
-	print(json.dumps(response, default=vars))
+	try:
+		response = asyncio.run(youtubei.suggestions(value, size=size))
+		print(json.dumps(response, default=vars))
+	except youtubei.Error as error:
+		print(error, file=sys.stderr)
 	return True
 
 
